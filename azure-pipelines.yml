@@ -32,6 +32,16 @@ stages:
               customCommand: 'fmt'
               environmentServiceNameAzureRM: '$(svc)'
           - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+              backendServiceArm: '$(svc)'
+              backendAzureRmStorageAccountName: 'backendstg12354'
+              backendAzureRmContainerName: 'my-container'
+              backendAzureRmKey: 'terraform.tfstate'
+          
+          - task: TerraformTask@5
             displayName: validate
             inputs:
               provider: 'azurerm'
