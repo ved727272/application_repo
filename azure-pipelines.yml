@@ -18,6 +18,15 @@ stages:
             displayName: terraform install
             inputs:
               terraformVersion: 'latest'
+          - task: TerraformTask@5
+            displayName: terraform fmt
+            inputs:
+              provider: 'azurerm'
+              command: 'custom'
+              outputTo: 'console'
+              customCommand: 'fmt'
+
+
               
               
 
