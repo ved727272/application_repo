@@ -7,6 +7,10 @@ trigger:
 pool: 
   name: application_pool
 
+variables:
+  - group: New variable group 19-Feb
+    
+
 stages:
   - stage: precommit
     displayName: pre-commit
@@ -25,18 +29,21 @@ stages:
               command: 'custom'
               outputTo: 'console'
               customCommand: 'fmt'
-              environmentServiceNameAzureRM: 'application-svc'
+              environmentServiceNameAzureRM: $(svc)
           - task: TerraformTask@5
             displayName: validate
             inputs:
               provider: 'azurerm'
               command: 'validate'
       - job: tflint
+        dependsOn: terraforminstallvalidate
         displayName: tflint
+        continueOnError: true
         steps: 
           - task: tfsec@1
             inputs:
               version: 'v1.26.0'
+              
                    
               
                
