@@ -15,9 +15,9 @@ stages:
         displayName: terraform install
         steps:
           - task: TerraformInstaller@1
-            displayName: terraform install]
+            displayName: terraform install
             inputs:
-              terraformVersion: latest
+              terraformVersion: 'latest'
               
               
 
