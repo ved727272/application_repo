@@ -27,14 +27,16 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'custom'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
               outputTo: 'console'
               customCommand: 'fmt'
-              environmentServiceNameAzureRM: $(svc)
+              environmentServiceNameAzureRM: '$(svc)'
           - task: TerraformTask@5
             displayName: validate
             inputs:
               provider: 'azurerm'
               command: 'validate'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
       - job: tflint
         dependsOn: terraforminstallvalidate
         displayName: tflint
@@ -50,6 +52,7 @@ stages:
               script: |
                 curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
                 tflint
+              workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
                    
               
                
