@@ -11,7 +11,7 @@ stages:
   - stage: precommit
     displayName: pre-commit
     jobs:
-      - job: terraforminstaller
+      - job: terraforminstallvalidate
         displayName: terraform install
         steps:
           - task: TerraformInstaller@1
@@ -31,6 +31,14 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'validate'
+      - job: tflint
+        displayName: tflint
+        steps: 
+          - task: tfsec@1
+            inputs:
+              version: 'v1.26.0'
+                   
+              
                
 
 
