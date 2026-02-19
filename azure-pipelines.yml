@@ -26,6 +26,12 @@ stages:
               outputTo: 'console'
               customCommand: 'fmt'
               environmentServiceNameAzureRM: 'application-svc'
+          - task: TerraformTask@5
+            displayName: validate
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+               
 
 
               
