@@ -1,8 +1,8 @@
 trigger:
   branches:
     include:
-      - main
-      - feature/*
+      - dev
+
 
 pool: 
   name: application_pool
