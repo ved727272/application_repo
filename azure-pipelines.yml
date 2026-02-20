@@ -8,22 +8,22 @@ pool:
   name: application_pool
 
 variables:
-  - group: New variable group 19-Feb
+  - group: VG-DEV
     
 
 stages:
-  - stage: precommit
-    displayName: pre-commit
+  - stage: precheck
+    displayName: pre-check
     jobs:
-      - job: terraforminstallvalidate
-        displayName: terraform install
+      - job: terraformvalidate
+        displayName: Terraform Install & Validate
         steps:
           - task: TerraformInstaller@1
             displayName: terraform install
             inputs:
               terraformVersion: 'latest'
           - task: TerraformTask@5
-            displayName: terraform fmt
+            displayName: Terraform Fmt
             inputs:
               provider: 'azurerm'
               command: 'custom'
@@ -32,27 +32,29 @@ stages:
               customCommand: 'fmt'
               environmentServiceNameAzureRM: '$(svc)'
           - task: TerraformTask@5
+            displayName: Terraform Init
             inputs:
               provider: 'azurerm'
               command: 'init'
               workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
               backendServiceArm: '$(svc)'
-              backendAzureRmStorageAccountName: 'backendstg12354'
-              backendAzureRmContainerName: 'my-container'
-              backendAzureRmKey: 'terraform.tfstate'
+              backendAzureRmStorageAccountName: '$(storage)'
+              backendAzureRmContainerName: '$(container)'
+              backendAzureRmKey: '$(key)'
           
           - task: TerraformTask@5
-            displayName: validate
+            displayName: Terraform validate
             inputs:
               provider: 'azurerm'
               command: 'validate'
               workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-      - job: tflint
-        dependsOn: terraforminstallvalidate
-        displayName: tflint
+      - job: tfsecurityscan
+        dependsOn: terraformvalidate
+        displayName: Security & Lint Scan
         continueOnError: true
         steps: 
           - task: tfsec@1
+            displayName: tf_sec
             inputs:
               version: 'v1.26.0'
           - task: Bash@3
@@ -66,6 +68,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
                    
           - task: PowerShell@2
+            displayName: Terrascan
             inputs:
               targetType: 'inline'
               script: |
