@@ -67,7 +67,7 @@ stages:
                 tflint
               workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
                    
-          - task: PowerShell@2
+          - task: Bash@3
             displayName: Terrascan
             inputs:
               targetType: 'inline'
